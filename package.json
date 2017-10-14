@@ -57,7 +57,8 @@
       "suiteSetup",
       "suiteTeardown",
       "teardown",
-      "test"
+      "test",
+      "ErrorEvent"      
     ],
     "ignore": ["test/fixtures"]
   }
