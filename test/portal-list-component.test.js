@@ -80,7 +80,7 @@ suite('PortalListComponent', function () {
   })
 
   test('automatically showing and hiding host connection info', async () => {
-    const {component, element, portalBindingManager} = await buildComponent()
+    const {component, portalBindingManager} = await buildComponent()
 
     const {hostPortalBindingComponent} = component.refs
     assert(!hostPortalBindingComponent.props.isConnectionInfoVisible)
@@ -98,7 +98,7 @@ suite('PortalListComponent', function () {
   })
 
   test('joining portals', async () => {
-    const {component, element, portalBindingManager} = await buildComponent()
+    const {component} = await buildComponent()
     const {joinPortalComponent, guestPortalBindingsContainer} = component.refs
 
     assert(joinPortalComponent.refs.joinPortalLabel)
