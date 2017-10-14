@@ -21,9 +21,9 @@ suite('RealTimePackage', function () {
   suiteSetup(async function () {
     const {startTestServer} = require('@atom/real-time-server')
     testServer = await startTestServer({
-      databaseURL: 'postgres://localhost:5432/real-time-test',
+      databaseURL: 'postgres://localhost:5432/real-time-test'
       // Uncomment and provide credentials to test against Pusher.
-      // pusherCredentials: {
+      // , pusherCredentials: {
       //   appId: '123',
       //   key: '123',
       //   secret: '123'
