@@ -14,6 +14,7 @@
     "@atom/real-time-server": "https://user-with-just-readonly-access-to-realtime-repos:924792417376b236ca11cc234bcc95d306dcd1cb@api.github.com/repos/atom/real-time-server/tarball/v0.13.0",
     "atom-mocha-test-runner": "^1.0.1",
     "deep-equal": "^1.0.1",
+    "standard": "^10.0.3",
     "temp": "^0.8.3"
   },
   "dependencies": {
@@ -46,5 +47,17 @@
       "default": "f119821248b7429bece3",
       "order": 2
     }
+  },
+  "standard": {
+    "globals": [
+      "atom",
+      "setup",
+      "suite",
+      "suiteSetup",
+      "suiteTeardown",
+      "teardown",
+      "test"
+    ],
+    "ignore": ["test/fixtures"]
   }
 }
