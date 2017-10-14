@@ -16,7 +16,7 @@ const temp = require('temp').track()
 suite('RealTimePackage', function () {
   if (process.env.CI) this.timeout(process.env.TEST_TIMEOUT_IN_MS)
 
-  let testServer, containerElement, environments, packages, portals
+  let testServer, containerElement, packages
 
   suiteSetup(async function () {
     const {startTestServer} = require('@atom/real-time-server')
@@ -109,7 +109,7 @@ suite('RealTimePackage', function () {
     // Start out as a host sharing a portal with a guest (Portal 1)
     const portal1Id = (await hostAndGuestPackage.sharePortal()).id
     guestOnlyPackage.joinPortal(portal1Id)
-    const hostAndGuestEditor = await hostAndGuestEnv.workspace.open(path.join(temp.path(), 'host+guest'))
+    await hostAndGuestEnv.workspace.open(path.join(temp.path(), 'host+guest'))
     await condition(() => deepEqual(getPaneItemTitles(guestOnlyEnv), ['Remote Buffer: host+guest']))
 
     // While already hosting Portal 1, join Portal 2 as a guest
@@ -310,7 +310,7 @@ suite('RealTimePackage', function () {
     const notifications = []
     guestPackage.notificationManager.onDidAddNotification((n) => notifications.push(n))
 
-    const guestPortal = await guestPackage.joinPortal('some-nonexistent-portal-id')
+    await guestPackage.joinPortal('some-nonexistent-portal-id')
     const errorNotification = notifications.find((n) => n.message === 'Portal not found')
     assert(errorNotification, 'Expected notifications to include "Portal not found" error')
   })
@@ -720,7 +720,7 @@ suite('RealTimePackage', function () {
     const guestPackage = await buildPackage(guestEnv)
     guestPackage.joinPortal(hostPortal.id)
 
-    const unsavedFileEditor = await hostEnv.workspace.open()
+    await hostEnv.workspace.open()
     await condition(() => deepEqual(getPaneItemTitles(guestEnv).pop(), 'Remote Buffer: untitled'))
     assert.equal(guestEnv.workspace.getActivePaneItem().getPath(), 'remote:untitled')
 
@@ -745,7 +745,7 @@ suite('RealTimePackage', function () {
   test('adding and removing workspace element classes when sharing a portal', async () => {
     const host1Env = buildAtomEnvironment()
     const host1Package = await buildPackage(host1Env)
-    const host1Portal = await host1Package.sharePortal()
+    await host1Package.sharePortal()
     assert(host1Env.workspace.getElement().classList.contains('realtime-Host'))
     await host1Package.closeHostPortal()
     assert(!host1Env.workspace.getElement().classList.contains('realtime-Host'))
