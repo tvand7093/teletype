@@ -775,7 +775,6 @@ suite('RealTimePackage', function () {
       assert(notification.isDismissed())
     }
 
-
     {
       env.notifications.clear()
 
