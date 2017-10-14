@@ -5,6 +5,7 @@
   "main": "index.js",
   "repository": "https://github.com/atom/real-time",
   "scripts": {
+    "lint": "standard --verbose",
     "test": "atom --test test"
   },
   "author": "",
