@@ -922,16 +922,14 @@ suite('TeletypePackage', function () {
 
       await pack.consumeStatusBar(new FakeStatusBar())
 
-      assert.equal(env.notifications.getNotifications().length, 1)
-      const {type, message, options} = env.notifications.getNotifications()[0]
-      const {description} = options
-      assert.equal(type, 'error')
-      assert.equal(message, 'Failed to initialize the teletype package')
-      assert(description.includes('an error'))
-
       const {popoverComponent} = pack.portalStatusBarIndicator
       assert(pack.portalStatusBarIndicator.element.classList.contains('initialization-error'))
-      assert(popoverComponent.refs.packageInitializationErrorComponent)
+
+      // make sure that the error is visible in the popover view
+      const initErrorPrompt = popoverComponent.refs.packageInitializationErrorComponent
+      assert(initErrorPrompt.props.initializationError)
+      assert(initErrorPrompt.element.innerHTML.indexOf('an error') !== -1)
+      assert.equal(initErrorPrompt.props.initializationError.message, 'an error')
     }
   })
 
