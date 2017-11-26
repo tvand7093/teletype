@@ -879,58 +879,25 @@ suite('TeletypePackage', function () {
   })
 
   test('reports errors attempting to initialize the client', async () => {
-    {
-      const env = buildAtomEnvironment()
-      const pack = await buildPackage(env, {signIn: false})
-      pack.client.initialize = async function () {
-        throw new Error('an error')
-      }
-
-      await pack.sharePortal()
-
-      assert.equal(env.notifications.getNotifications().length, 1)
-      const {type, message, options} = env.notifications.getNotifications()[0]
-      const {description} = options
-      assert.equal(type, 'error')
-      assert.equal(message, 'Failed to initialize the teletype package')
-      assert(description.includes('an error'))
+    const env = buildAtomEnvironment()
+    const pack = await buildPackage(env, {signIn: false})
+    pack.client.initialize = async function () {
+      throw new Error('an error')
     }
 
-    {
-      const env = buildAtomEnvironment()
-      const pack = await buildPackage(env, {signIn: false})
-      pack.client.initialize = async function () {
-        throw new Error('an error')
-      }
+    await pack.consumeStatusBar(new FakeStatusBar())
 
-      await pack.joinPortal()
+    // No notifications should be shown
+    assert.equal(env.notifications.getNotifications().length, 0)
 
-      assert.equal(env.notifications.getNotifications().length, 1)
-      const {type, message, options} = env.notifications.getNotifications()[0]
-      const {description} = options
-      assert.equal(type, 'error')
-      assert.equal(message, 'Failed to initialize the teletype package')
-      assert(description.includes('an error'))
-    }
+    const {popoverComponent} = pack.portalStatusBarIndicator
+    assert(pack.portalStatusBarIndicator.element.classList.contains('initialization-error'))
 
-    {
-      const env = buildAtomEnvironment()
-      const pack = await buildPackage(env, {signIn: false})
-      pack.client.initialize = async function () {
-        throw new Error('an error')
-      }
-
-      await pack.consumeStatusBar(new FakeStatusBar())
-
-      const {popoverComponent} = pack.portalStatusBarIndicator
-      assert(pack.portalStatusBarIndicator.element.classList.contains('initialization-error'))
-
-      // make sure that the error is visible in the popover view
-      const initErrorPrompt = popoverComponent.refs.packageInitializationErrorComponent
-      assert(initErrorPrompt.props.initializationError)
-      assert(initErrorPrompt.element.innerHTML.indexOf('an error') !== -1)
-      assert.equal(initErrorPrompt.props.initializationError.message, 'an error')
-    }
+    // make sure that the error is visible in the popover view
+    const initErrorPrompt = popoverComponent.refs.packageInitializationErrorComponent
+    assert(initErrorPrompt.props.initializationError)
+    assert(initErrorPrompt.element.innerHTML.indexOf('an error') !== -1)
+    assert.equal(initErrorPrompt.props.initializationError.message, 'an error')
   })
 
   test('reports errors attempting to sign in', async () => {
